@@ -9,21 +9,41 @@ public class Player : MonoBehaviour
 {
     [Header("Player")]
     public Vector2 posInicial;
-    public  float velocidadeX=0.1f,velocidadeZ,velocidadeZTotal,alturaTotal;
+    public float velocidadeX = 0.1f;
+    public float velocidadeZ;
+    public float velocidadeZTotal;
+    public float alturaTotal;
     public GameObject player;
     public static bool playerVivo;
     public float posYInicial;
 
-    [Header("PowerUps")]
+    [Header("PowerUpVelocidade")]
+    public int adicionalVelocidade;
+    public int duracaoPowerUpVelocidade;
+    private bool ativarPowerUpVelocidade;
 
-    public int adicionalVelocidade,duracaoPowerUpVelocidade;
+   [Header("PowerUpInvencibilidade")]
     public int duracaoPowerUpInvencibilidade;
+    public bool ativarPowerUpInvencibilidade;
+
+    [Header("PowerUpVoo")]
     public int duracaoPowerUpVoo;
     public Ease ease;
-    public float posYVoo, duracaoAnimacaoVoo;
-    private bool ativarPowerUpVelocidade,ativarPowerUpInvencibilidade, ativarPowerUpVoo;
+    public float posYVoo;
+    public float duracaoAnimacaoVoo;
+    public bool ativarPowerUpVoo;
+
+    [Header("PowerUpColetor")]
+    public bool ativarPowerUpColetor;
+    public GameObject powerUpColetor;
+    public float duracaoAnimacaoPowerUpColetor;
+    public int duracaoPowerUpColetor;
+
+    [Header("UIPlayer")]
     public Material[] powerUPMaterial;
     public TextMeshProUGUI powerUPText;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +53,7 @@ public class Player : MonoBehaviour
         ativarPowerUpVelocidade= false;
         powerUPText.text = "";
         adicionalVelocidade = 0;
-
+       
 
         
        
@@ -64,6 +84,7 @@ public class Player : MonoBehaviour
 
     public void AtivarPowerUps()
     {
+        //powerUp velocidade
         if (ativarPowerUpVelocidade)
 
         {
@@ -71,6 +92,7 @@ public class Player : MonoBehaviour
             adicionalVelocidade = 10;
             player.GetComponent<Renderer>().material = powerUPMaterial[1];
             duracaoPowerUpVelocidade--;
+
             if (duracaoPowerUpVelocidade > 0)
             {
                 adicionalVelocidade = 10;
@@ -92,6 +114,7 @@ public class Player : MonoBehaviour
             powerUPText.text = "Invencibilidade";
             player.GetComponent<Renderer>().material = powerUPMaterial[2];
             duracaoPowerUpInvencibilidade--;
+
             if (duracaoPowerUpInvencibilidade <= 0)
             {
                 powerUPText.text = "";
@@ -100,19 +123,36 @@ public class Player : MonoBehaviour
             }
         }
 
+        //powerUp voo
         else if (ativarPowerUpVoo)
         {
             powerUPText.text = "Voar";
             player.transform.DOMoveY(posYVoo,duracaoAnimacaoVoo).SetEase(ease);
-            //player.transform.position = new Vector3(player.transform.position.x,posYVoo, player.transform.position.z);
             player.GetComponent<Renderer>().material = powerUPMaterial[3];
             duracaoPowerUpVoo--;
+
             if (duracaoPowerUpVoo <= 0)
             {
                 powerUPText.text = "";
                 player.transform.DOMoveY(posYInicial, duracaoAnimacaoVoo).SetEase(ease);
-                //player.transform.position = new Vector3(player.transform.position.x, 0.9f, player.transform.position.z);
                 ativarPowerUpVoo = false;
+                player.GetComponent<Renderer>().material = powerUPMaterial[0];
+            }
+        }
+
+        //powerUp coletor
+        else if (ativarPowerUpColetor)
+        {
+            powerUPText.text = "Imã de moedas";
+            powerUpColetor.transform.DOScale(new Vector3(8,1,1),0);
+            player.GetComponent<Renderer>().material = powerUPMaterial[4];
+            duracaoPowerUpColetor--;
+
+            if (duracaoPowerUpColetor <= 0)
+            {
+                powerUpColetor.transform.DOScale(new Vector3(1, 1, 1), 0);
+                powerUPText.text = "";
+                ativarPowerUpColetor = false;
                 player.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
@@ -142,7 +182,7 @@ public class Player : MonoBehaviour
         {
 
             ativarPowerUpInvencibilidade = true;
-            print("aumentar velocidade");
+            print("estou invencivel");
 
 
         }
@@ -150,7 +190,16 @@ public class Player : MonoBehaviour
         {
 
             ativarPowerUpVoo = true;
-            print("aumentar velocidade");
+            print("estou voando");
+
+
+        }
+
+        else if (collision.tag == "powerUPColetor")
+        {
+
+            ativarPowerUpColetor = true;
+            print("Ima de moedas Ativado");
 
 
         }

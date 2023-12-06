@@ -12,7 +12,7 @@ public class Coletaveis : MonoBehaviour
         //efeitoMoeda.Play();
        
         //sfxMoedas.Play();
-        if (collision.tag == "Player")
+        if (collision.tag == "coletor")
         {
             qtdMoedas++;
             gameObject.SetActive(false);

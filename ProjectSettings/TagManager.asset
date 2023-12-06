@@ -8,11 +8,14 @@ TagManager:
   - powerUPInvencibilidade
   - powerUPVelocidade
   - powerUPVoo
+  - powerUPColetor
+  - coletavel
+  - coletor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - powerUps
   - Water
   - UI
   - 
