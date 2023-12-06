@@ -11,22 +11,26 @@ public class Player : MonoBehaviour
     public GameObject player;
     public static bool playerVivo;
 
-    [Header("PowerUp")]
+    [Header("PowerUps")]
 
     public int adicionalVelocidade,duracaoPowerUpVelocidade;
-    public bool ativarPowerUp;
+    public int duracaoPowerUpInvencibilidade;
+    public bool ativarPowerUpVelocidade,ativarPowerUpInvencibilidade;
+    public  bool estouInvencivel;
+    public Material[] materialEfeito;
 
     // Start is called before the first frame update
     void Start()
     {
         playerVivo = true;
+        estouInvencivel = false;
        
     }
 
     // Update is called once per frame
     void Update()
     {
-        PowerUpVelocidade();
+        AtivarPowerUps();
         velocidadeZTotal = velocidadeZ + adicionalVelocidade;
         if (playerVivo==true)
         {
@@ -44,11 +48,13 @@ public class Player : MonoBehaviour
         transform.position += Vector3.right * Time.deltaTime*forcaMovimentacao*velocidadeX;
     }
 
-    public void PowerUpVelocidade()
+    public void AtivarPowerUps()
     {
-        if (ativarPowerUp == true)
+        if (ativarPowerUpVelocidade == true)
+
         {
             adicionalVelocidade = 10;
+            player.GetComponent<Renderer>().material = materialEfeito[1];
             duracaoPowerUpVelocidade--;
             if (duracaoPowerUpVelocidade > 0)
             {
@@ -57,8 +63,23 @@ public class Player : MonoBehaviour
             else
             {
                 adicionalVelocidade = 0;
+                player.GetComponent<Renderer>().material = materialEfeito[0];
                 duracaoPowerUpVelocidade = 20;
-                ativarPowerUp = false;
+                ativarPowerUpVelocidade = false;
+            }
+
+        }
+
+        //powerUp invencibilidade
+        else if (ativarPowerUpInvencibilidade)
+        {
+            
+            player.GetComponent<Renderer>().material = materialEfeito[2];
+            duracaoPowerUpInvencibilidade--;
+            if (duracaoPowerUpInvencibilidade <= 0)
+            {
+                ativarPowerUpInvencibilidade = false;
+                player.GetComponent<Renderer>().material = materialEfeito[0];
             }
         }
         
@@ -67,7 +88,7 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         
-        if (collision.tag == "Inimigo")
+        if (collision.tag == "Inimigo"&& ativarPowerUpInvencibilidade==false)
         {
 
             playerVivo = false;
@@ -75,10 +96,18 @@ public class Player : MonoBehaviour
 
 
         }
-        else if (collision.tag == "powerUp")
+        else if (collision.tag == "powerUPVelocidade")
         {
 
-            ativarPowerUp = true;
+            ativarPowerUpVelocidade = true;
+            print("aumentar velocidade");
+
+
+        }
+        else if (collision.tag == "powerUPInvencibilidade")
+        {
+
+            ativarPowerUpInvencibilidade = true;
             print("aumentar velocidade");
 
 

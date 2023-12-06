@@ -1,17 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PowerUps : MonoBehaviour
 {
    
-    public static int tipoPowerUp;
-    
-
-    public void Start()
-    {
-       
-    }
 
     private void OnTriggerEnter(Collider collision)
     {

@@ -5,7 +5,8 @@ using TMPro;
 
 public class Coletaveis : MonoBehaviour
 {
-   // public AudioSource sfxMoedas;
+    // public AudioSource sfxMoedas;
+    public static int qtdMoedas;
     private void OnTriggerEnter(Collider collision)
     {
         //efeitoMoeda.Play();
@@ -13,8 +14,9 @@ public class Coletaveis : MonoBehaviour
         //sfxMoedas.Play();
         if (collision.tag == "Player")
         {
-            
-            Destroy(gameObject);
+            qtdMoedas++;
+            gameObject.SetActive(false);
+            Destroy(gameObject,1);
             print("COLETEI");
 
 
