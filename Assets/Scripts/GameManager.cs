@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     {
         if (Player.playerVivo == false)
         {
+            Coletaveis.qtdMoedas = 0;
             Time.timeScale = 0;
             painelInicio.SetActive(true);
             SceneManager.LoadScene(0);
