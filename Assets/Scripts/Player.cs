@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public GameObject player;
     public static bool playerVivo;
     public float posYInicial;
+    public Animator anim;
 
     [Header("PowerUpVelocidade")]
     public int adicionalVelocidade;
@@ -53,10 +54,10 @@ public class Player : MonoBehaviour
         ativarPowerUpVelocidade= false;
         powerUPText.text = "";
         adicionalVelocidade = 0;
-       
+        anim.Play("ANIM_Astronaut_Idle");
 
-        
-       
+
+
     }
 
     // Update is called once per frame
@@ -65,10 +66,11 @@ public class Player : MonoBehaviour
         AtivarPowerUps();
         velocidadeZTotal = velocidadeZ + adicionalVelocidade;
         
-        if (playerVivo==true)
+        if (playerVivo==true && GameManager.inicieiJogo)
         {
            
             player.transform.Translate(transform.forward * (velocidadeZTotal) * Time.deltaTime);
+            anim.Play("ANIM_Astronaut_Run");
             if (Input.GetMouseButton(0))
             {
                 Movimentacao(Input.mousePosition.x - posInicial.x);
@@ -167,6 +169,8 @@ public class Player : MonoBehaviour
 
             playerVivo = false;
             print("morri");
+            anim.Play("ANIM_Astronaut_Death");
+            transform.DOMoveZ(-1f,0.5f).SetRelative();
 
 
         }

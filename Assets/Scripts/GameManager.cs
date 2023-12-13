@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject painelInicio;
+    public static bool inicieiJogo=false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     }
     public void IniciarJogo()
     {
+        inicieiJogo= true;
         Time.timeScale = 1;
         painelInicio.SetActive(false);
     }
@@ -28,12 +30,20 @@ public class GameManager : MonoBehaviour
     {
         if (Player.playerVivo == false)
         {
-            Coletaveis.qtdMoedas = 0;
-            Time.timeScale = 0;
-            painelInicio.SetActive(true);
-            SceneManager.LoadScene(0);
 
+            StartCoroutine("delayReiniciarJogo");
         }
     }
 
+    IEnumerator delayReiniciarJogo()
+    {
+
+        yield return new WaitForSeconds(2f);
+        Coletaveis.qtdMoedas = 0;
+        Time.timeScale = 0;
+        SceneManager.LoadScene(0);
+        painelInicio.SetActive(true);
+        inicieiJogo = false;
+
+    }
 }
