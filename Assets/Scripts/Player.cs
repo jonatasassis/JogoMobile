@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public float velocidadeZ;
     public float velocidadeZTotal;
     public float alturaTotal;
-    public GameObject player;
+    public GameObject player,indicadorPowerUp;
     public static bool playerVivo;
     public float posYInicial;
     public Animator anim;
@@ -42,7 +42,6 @@ public class Player : MonoBehaviour
 
     [Header("UIPlayer")]
     public Material[] powerUPMaterial;
-    public TextMeshProUGUI powerUPText;
     public static int QtdFinalPeca;
     public static bool acrescentarPeca=false;
 
@@ -54,7 +53,6 @@ public class Player : MonoBehaviour
         playerVivo = true;
         ativarPowerUpInvencibilidade= false;
         ativarPowerUpVelocidade= false;
-        powerUPText.text = "";
         adicionalVelocidade = 0;
         anim.Play("ANIM_Astronaut_Idle");
 
@@ -65,6 +63,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         AtivarPowerUps();
         velocidadeZTotal = velocidadeZ + adicionalVelocidade;
         
@@ -92,16 +91,16 @@ public class Player : MonoBehaviour
         if (ativarPowerUpVelocidade)
 
         {
-            powerUPText.text = "Velocidade";
-            player.GetComponent<Renderer>().material = powerUPMaterial[1];
+           
+            indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[1];
             duracaoPowerUpVelocidade--;
             adicionalVelocidade = 20;
 
             if(duracaoPowerUpVelocidade<=0)
             {
-                powerUPText.text = "";
+                
                 adicionalVelocidade = 0;
-                player.GetComponent<Renderer>().material = powerUPMaterial[0];
+                indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[0];
                 duracaoPowerUpVelocidade = 20;
                 ativarPowerUpVelocidade = false;
             }
@@ -111,52 +110,52 @@ public class Player : MonoBehaviour
         //powerUp invencibilidade
         else if (ativarPowerUpInvencibilidade)
         {
-            powerUPText.text = "Invencibilidade";
-            player.GetComponent<Renderer>().material = powerUPMaterial[2];
+
+            indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[2];
             duracaoPowerUpInvencibilidade--;
 
             if (duracaoPowerUpInvencibilidade <= 0)
             {
-                powerUPText.text = "";
+               
                 ativarPowerUpInvencibilidade = false;
                 duracaoPowerUpInvencibilidade = 130;
-                player.GetComponent<Renderer>().material = powerUPMaterial[0];
+                indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
 
         //powerUp voo
         else if (ativarPowerUpVoo)
         {
-            powerUPText.text = "Voar";
+            
             player.transform.DOMoveY(posYVoo,duracaoAnimacaoVoo).SetEase(ease);
-            player.GetComponent<Renderer>().material = powerUPMaterial[3];
+            indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[3];
             duracaoPowerUpVoo--;
 
             if (duracaoPowerUpVoo <= 0)
             {
-                powerUPText.text = "";
+                
                 player.transform.DOMoveY(posYInicial, duracaoAnimacaoVoo).SetEase(ease);
                 ativarPowerUpVoo = false;
                 duracaoPowerUpVoo = 50;
-                player.GetComponent<Renderer>().material = powerUPMaterial[0];
+                indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
 
         //powerUp coletor
         else if (ativarPowerUpColetor)
         {
-            powerUPText.text = "Imã de moedas";
+            
             powerUpColetor.transform.DOScale(new Vector3(8,1,1),0);
-            player.GetComponent<Renderer>().material = powerUPMaterial[4];
+            indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[4];
             duracaoPowerUpColetor--;
 
             if (duracaoPowerUpColetor <= 0)
             {
                 powerUpColetor.transform.DOScale(new Vector3(1, 1, 1), 0);
-                powerUPText.text = "";
+                
                 ativarPowerUpColetor = false;
                 duracaoPowerUpColetor = 100;
-                player.GetComponent<Renderer>().material = powerUPMaterial[0];
+                indicadorPowerUp.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
 
