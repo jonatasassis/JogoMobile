@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
     [Header("UIPlayer")]
     public Material[] powerUPMaterial;
     public TextMeshProUGUI powerUPText;
+    public static int QtdFinalPeca;
+    public static bool acrescentarPeca=false;
 
 
 
@@ -91,15 +93,11 @@ public class Player : MonoBehaviour
 
         {
             powerUPText.text = "Velocidade";
-            adicionalVelocidade = 10;
             player.GetComponent<Renderer>().material = powerUPMaterial[1];
             duracaoPowerUpVelocidade--;
+            adicionalVelocidade = 20;
 
-            if (duracaoPowerUpVelocidade > 0)
-            {
-                adicionalVelocidade = 10;
-            }
-            else
+            if(duracaoPowerUpVelocidade<=0)
             {
                 powerUPText.text = "";
                 adicionalVelocidade = 0;
@@ -121,6 +119,7 @@ public class Player : MonoBehaviour
             {
                 powerUPText.text = "";
                 ativarPowerUpInvencibilidade = false;
+                duracaoPowerUpInvencibilidade = 130;
                 player.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
@@ -138,6 +137,7 @@ public class Player : MonoBehaviour
                 powerUPText.text = "";
                 player.transform.DOMoveY(posYInicial, duracaoAnimacaoVoo).SetEase(ease);
                 ativarPowerUpVoo = false;
+                duracaoPowerUpVoo = 50;
                 player.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
@@ -155,6 +155,7 @@ public class Player : MonoBehaviour
                 powerUpColetor.transform.DOScale(new Vector3(1, 1, 1), 0);
                 powerUPText.text = "";
                 ativarPowerUpColetor = false;
+                duracaoPowerUpColetor = 100;
                 player.GetComponent<Renderer>().material = powerUPMaterial[0];
             }
         }
@@ -204,6 +205,14 @@ public class Player : MonoBehaviour
 
             ativarPowerUpColetor = true;
             print("Ima de moedas Ativado");
+
+
+        }
+        else if (collision.tag == "finalPeca")
+        {
+
+            QtdFinalPeca++;
+            acrescentarPeca = true;
 
 
         }
