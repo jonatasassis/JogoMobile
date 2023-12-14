@@ -7,19 +7,27 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject painelInicio,player,peca1,peca2,peca3,peca4;
-    public static bool inicieiJogo=false;
 
+    [Header("Terreno")]
+    public GameObject painelInicio, player, peca1, peca2, peca3, peca4;
     public GameObject[] tiposPecas;
-    public int idPeca,posZPecaFinal;
-    
+    public int idPeca, posZPecaFinal;
+    public Material materialPecas;
+    public Color corPecas;
+    public float RandR,RandB,RandG;
+
+    [Header("Variaveis do jogo")]
+    public static bool inicieiJogo = false;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 0;
         painelInicio.SetActive(true);
-       
-       
+
+
 
 
     }
@@ -27,12 +35,12 @@ public class GameManager : MonoBehaviour
     {
         SpawnPecas();
         ReiniciarJogo();
-       
+
 
     }
     public void IniciarJogo()
     {
-        inicieiJogo= true;
+        inicieiJogo = true;
         Time.timeScale = 1;
         painelInicio.SetActive(false);
     }
@@ -60,38 +68,38 @@ public class GameManager : MonoBehaviour
     public void SpawnPecas()
     {
 
-        if (Player.QtdFinalPeca > 2&&Player.acrescentarPeca)
+        if (Player.QtdFinalPeca > 2 && Player.acrescentarPeca)
         {
             Destroy(peca1);
             idPeca = Random.Range(0, tiposPecas.Length);
             posZPecaFinal = posZPecaFinal + 20;
-            peca4= Instantiate(tiposPecas[idPeca], new Vector3(0, 0, posZPecaFinal), Quaternion.identity);
+            RandomCorPecas();
+            peca4 = Instantiate(tiposPecas[idPeca], new Vector3(0, 0, posZPecaFinal), Quaternion.identity);
             peca1 = peca2;
             peca2 = peca3;
             peca3 = peca4;
             Player.acrescentarPeca = false;
-           
+
 
         }
-        /*if (posZPlayer >posZPecaFinal-25)
-        {
-            
-                idPeca = Random.Range(0, tiposPecas.Length);
-                pecaCriada= Instantiate(tiposPecas[idPeca], new Vector3(0, 0, posZPecaFinal), Quaternion.identity);
-                pecasInGame[qtdPecas]=pecaCriada;
-                posZPecaFinal = posZPecaFinal + 20;
-            Destroy(pecasInGame[qtdPecas-3]);
-                qtdPecas++;
-           
-                
-            
-        }*/
 
-      
-          
+
     }
-      
-     }
+
+    public void RandomCorPecas()
+    {
+        RandR= Random.Range(0f,2f);
+        RandG = Random.Range(0f, 2f);
+        RandB = Random.Range(0f, 2f);
+        corPecas.r = RandR;
+        corPecas.g = RandG;
+        corPecas.b = RandB;
+        materialPecas.SetColor("_Color",corPecas);
+
+
+    }
+
+}
 
        
     

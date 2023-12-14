@@ -11,6 +11,8 @@ TagManager:
   - powerUPColetor
   - coletavel
   - coletor
+  - powerUp
+  - finalPeca
   layers:
   - Default
   - TransparentFX
