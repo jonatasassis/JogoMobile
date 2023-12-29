@@ -68,7 +68,10 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ativarPowerUpVoo = true;
+        }
         AtivarPowerUps();
         velocidadeZTotal = velocidadeZ + adicionalVelocidade;
         
@@ -185,8 +188,8 @@ public class Player : MonoBehaviour
     }
     public void Bounce ()
     {
-        player.transform.DOScale(2, 0.2f).SetLoops(2, LoopType.Yoyo);
-        player.transform.DOMoveY(1, 0.2f);
+        player.transform.DOScale(2, 0.1f).SetLoops(2, LoopType.Yoyo);
+        player.transform.DOMoveY(1, 0.1f);
         StartCoroutine(DelaySpawn());
         
     }
