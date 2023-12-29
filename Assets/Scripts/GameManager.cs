@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 
 public class GameManager : MonoBehaviour
 {
 
     [Header("Terreno")]
-    public GameObject painelInicio, player, peca1, peca2, peca3, peca4;
+    public GameObject player;
+    public GameObject painelInicio;
+    public GameObject peca1;
+    public GameObject peca2;
+    public GameObject peca3;
+    public GameObject peca4;
+
     public GameObject[] tiposPecas;
     public int idPeca, posZPecaFinal;
     public Material materialPecas;
@@ -18,6 +25,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Variaveis do jogo")]
     public static bool inicieiJogo = false;
+
+    [Header("Animacoes do terreno")]
+    public Ease tipoEase;
+
+
 
 
 
@@ -49,11 +61,11 @@ public class GameManager : MonoBehaviour
         if (Player.playerVivo == false)
         {
 
-            StartCoroutine("delayReiniciarJogo");
+            StartCoroutine("DelayReiniciarJogo");
         }
     }
 
-    IEnumerator delayReiniciarJogo()
+    IEnumerator DelayReiniciarJogo()
     {
 
         yield return new WaitForSeconds(2f);
@@ -75,6 +87,7 @@ public class GameManager : MonoBehaviour
             posZPecaFinal = posZPecaFinal + 20;
             RandomCorPecas();
             peca4 = Instantiate(tiposPecas[idPeca], new Vector3(0, 0, posZPecaFinal), Quaternion.identity);
+            peca4.transform.DOScaleX(1,0.5f).SetEase(tipoEase);
             peca1 = peca2;
             peca2 = peca3;
             peca3 = peca4;
@@ -98,6 +111,8 @@ public class GameManager : MonoBehaviour
 
 
     }
+
+   
 
 }
 
