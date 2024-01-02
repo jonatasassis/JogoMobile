@@ -7,6 +7,7 @@ public class Coletaveis : MonoBehaviour
 {
     // public AudioSource sfxMoedas;
     public static int qtdMoedas,graus;
+    public ParticleSystem efeitoMoeda;
 
 
     private void Update()
@@ -16,14 +17,15 @@ public class Coletaveis : MonoBehaviour
     }
     private void OnTriggerEnter(Collider collision)
     {
-        //efeitoMoeda.Play();
-       
+        
+      
         //sfxMoedas.Play();
         if (collision.tag == "coletor")
         {
+            efeitoMoeda.Play();
             qtdMoedas++;
-            gameObject.SetActive(false);
-            Destroy(gameObject,1);
+            //gameObject.SetActive(false);
+            Destroy(gameObject,0.1f);
             print("COLETEI");
 
 

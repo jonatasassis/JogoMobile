@@ -5,7 +5,12 @@ using UnityEngine.UI;
 
 public class PowerUps : MonoBehaviour
 {
-   
+    public static int graus;
+    private void Update()
+    {
+        graus++;
+        this.transform.rotation = Quaternion.Euler(graus, graus, 0);
+    }
 
     private void OnTriggerEnter(Collider collision)
     {

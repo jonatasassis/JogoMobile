@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 {
     [Header("Player")]
     public Vector2 posInicial;
+    public float posPlayerX;
+    public Vector2 limites;
     public float velocidadeX = 0.1f;
     public float velocidadeZ;
     public float velocidadeZTotal;
@@ -43,11 +45,14 @@ public class Player : MonoBehaviour
     public GameObject powerUpColetor;
     public float duracaoAnimacaoPowerUpColetor;
     public int duracaoPowerUpColetor;
+    public ParticleSystem efeitoPowerUpColetor;
 
     [Header("UIPlayer")]
     public Material[] powerUPMaterial;
     public static int QtdFinalPeca;
     public static bool acrescentarPeca=false;
+    public ParticleSystem efeitoMorte;
+
 
 
 
@@ -67,11 +72,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ativarPowerUpVoo = true;
-        }
+        
+        posPlayerX = player.transform.position.x;
         AtivarPowerUps();
         velocidadeZTotal = velocidadeZ + adicionalVelocidade;
         
@@ -84,6 +86,16 @@ public class Player : MonoBehaviour
             {
                 Movimentacao(Input.mousePosition.x - posInicial.x);
             }
+            if (posPlayerX < limites.x)
+            {
+                player.transform.position = new Vector3(limites.x,player.transform.position.y,player.transform.position.z);
+
+            }
+            else if (posPlayerX > limites.y)
+            {
+                player.transform.position = new Vector3(limites.y, player.transform.position.y, player.transform.position.z);
+            }
+
             posInicial = Input.mousePosition;
         }
     }
@@ -103,6 +115,7 @@ public class Player : MonoBehaviour
             {
                 indicadorPowerUp[x].GetComponent<Renderer>().material = powerUPMaterial[1];
             }  
+           
             duracaoPowerUpVelocidade--;
             adicionalVelocidade = 20;
 
@@ -125,12 +138,17 @@ public class Player : MonoBehaviour
             {
                 indicadorPowerUp[x].GetComponent<Renderer>().material = powerUPMaterial[2];
             }
+            player.transform.DOScale(2, 0.1f);
+            player.transform.DOMoveY(1, 0.1f);
             duracaoPowerUpInvencibilidade--;
+            
 
             if (duracaoPowerUpInvencibilidade <= 0)
             {               
                 ativarPowerUpInvencibilidade = false;
                 duracaoPowerUpInvencibilidade = 130;
+                player.transform.DOScale(1, 0.1f);
+                player.transform.DOMoveY(0, 0.1f);
 
                 for (int x = 0; x < indicadorPowerUp.Length; x++)
                 {
@@ -164,7 +182,8 @@ public class Player : MonoBehaviour
 
         //powerUp coletor
         else if (ativarPowerUpColetor)
-        {          
+        {
+            efeitoPowerUpColetor.Play();
             powerUpColetor.transform.DOScale(new Vector3(8,1,1),0);
             for (int x = 0; x < indicadorPowerUp.Length; x++)
             {
@@ -174,9 +193,10 @@ public class Player : MonoBehaviour
 
             if (duracaoPowerUpColetor <= 0)
             {
-                powerUpColetor.transform.DOScale(new Vector3(1, 1, 1), 0);     
+                powerUpColetor.transform.DOScale(new Vector3(1, 1, 1), 0);
+                efeitoPowerUpColetor.Stop();
                 ativarPowerUpColetor = false;
-                duracaoPowerUpColetor = 100;
+                duracaoPowerUpColetor = 200;
                 for (int x = 0; x < indicadorPowerUp.Length; x++)
                 {
                     indicadorPowerUp[x].GetComponent<Renderer>().material = powerUPMaterial[0];
@@ -186,18 +206,20 @@ public class Player : MonoBehaviour
 
        
     }
-    public void Bounce ()
+    /*public void Bounce ()
     {
         player.transform.DOScale(2, 0.1f).SetLoops(2, LoopType.Yoyo);
         player.transform.DOMoveY(1, 0.1f);
         StartCoroutine(DelaySpawn());
         
-    }
+    }*/
     private void OnTriggerEnter(Collider collision)
     {
         
         if (collision.tag == "Inimigo"&& ativarPowerUpInvencibilidade==false)
         {
+            efeitoMorte.Play();
+            player.transform.DOScale(0, 0.1f);
            playerVivo = false;
             print("morri");
             anim.Play("ANIM_Astronaut_Death");
@@ -206,7 +228,7 @@ public class Player : MonoBehaviour
 
         else if (collision.tag == "powerUPVelocidade")
         {
-            Bounce();
+            //Bounce();
             ativarPowerUpVelocidade = true;
             print("aumentar velocidade");
 
@@ -214,7 +236,7 @@ public class Player : MonoBehaviour
 
         else if (collision.tag == "powerUPInvencibilidade")
         {
-            Bounce();
+            //Bounce();
             ativarPowerUpInvencibilidade = true;
             print("estou invencivel");
 
@@ -230,7 +252,7 @@ public class Player : MonoBehaviour
 
         else if (collision.tag == "powerUPColetor")
         {
-            Bounce();
+            //Bounce();
             ativarPowerUpColetor = true;
             print("Ima de moedas Ativado");
         }
